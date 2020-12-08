@@ -13,7 +13,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Endpoint has been started at localhost:" + portServer)
+	fmt.Println("App started at localhost:" + portServer)
 	api.StartServer(portServer)
 
 }
