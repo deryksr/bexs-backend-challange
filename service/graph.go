@@ -17,8 +17,8 @@ func (graph *Graph) GetCity(cityName string) *City {
 	return nil
 }
 
-func (graph *Graph) AddCity(cityName string) {
+func (graph *Graph) AddCity(city *City) {
 }
 
-func (graph *Graph) AddRoad(origin, destination string, cost int) {
+func (graph *Graph) AddRoad(origin, destination *City, cost int) {
 }

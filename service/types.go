@@ -5,7 +5,6 @@ type Graph struct {
 }
 
 type Road struct {
-	Soruce *City
 	Target *City
 	Cost   int
 }
