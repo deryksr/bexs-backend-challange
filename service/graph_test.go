@@ -2,29 +2,39 @@ package service
 
 import "testing"
 
-func TestGraphAddCity(test *testing.T) {
-	testGroup := []struct {
-		name  string
-		input []*City
-	}{
+type Fixture struct {
+	name  string
+	input []*City
+}
+
+func getFixture() []Fixture {
+	cityA := City{"A", false, nil}
+	cityB := City{"B", false, []*Road{
+		{&cityA, 10},
+	}}
+	cityC := City{"C", false, []*Road{
+		{&cityA, 10},
+		{&cityB, 30},
+	}}
+
+	return []Fixture{
 		{
 			"Do not adds any city",
 			nil,
 		},
 		{
 			"Add a city without any connection",
-			[]*City{&City{"B", false, nil}},
+			[]*City{&cityA},
 		},
 		{
 			"Add a city with connections",
-			[]*City{
-				&City{"B", false, []*Road{
-					&Road{&City{"D", false, nil}, 10},
-					&Road{&City{"E", false, nil}, 20},
-				}},
-			},
+			[]*City{&cityA, &cityB, &cityC},
 		},
 	}
+}
+
+func TestGraphAddCity(test *testing.T) {
+	testGroup := getFixture()
 
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
@@ -60,9 +70,31 @@ func TestGraphAddCity(test *testing.T) {
 		}
 		CleanGraph()
 	})
-
 }
 
 func TestGraphAddRoad(test *testing.T) {
+	testGroup := getFixture()
+
+	for _, testCase := range testGroup {
+		test.Run(testCase.name, func(test *testing.T) {
+			graph := GetGraphSingleton()
+			graph.Cities = testCase.input
+
+			newCity := City{"X", false, nil}
+			for _, currentCity := range graph.Cities {
+				expected := len(currentCity.Connections) + 1
+				graph.AddRoad(currentCity, &newCity, 95)
+
+				if expected != len(currentCity.Connections) {
+					test.Errorf(
+						"TestGraphAddRoad() expected: <%d> itens on Connections but got: %d",
+						expected,
+						len(currentCity.Connections),
+					)
+				}
+			}
+			CleanGraph()
+		})
+	}
 
 }

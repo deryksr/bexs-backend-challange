@@ -13,10 +13,6 @@ func CleanGraph() {
 	graphSingleton = nil
 }
 
-func (graph *Graph) GetCity(cityName string) *City {
-	return nil
-}
-
 func (graph *Graph) AddCity(city *City) {
 	isPresent := false
 	for _, currentCity := range graph.Cities {
