@@ -13,4 +13,5 @@ clean:
 test:
 	$(info Starting running tests ....)
 	@go test service/file.go service/file_test.go
+	@go test service/graph.go service/types.go service/graph_test.go
 	$(info All tests has been runned)
