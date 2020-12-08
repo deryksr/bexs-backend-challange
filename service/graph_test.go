@@ -44,6 +44,23 @@ func TestGraphAddCity(test *testing.T) {
 		})
 	}
 
+	test.Run("Do not add the same city twice", func(test *testing.T) {
+		graph := GetGraphSingleton()
+		inputCity := City{"B", false, nil}
+		graph.AddCity(&inputCity)
+		graph.AddCity(&inputCity)
+		graph.AddCity(&inputCity)
+
+		if len(graph.Cities) != 1 {
+			test.Errorf(
+				"TestGraphAddCity() expected: <%d> itens on graph but got: %d",
+				1,
+				len(graph.Cities),
+			)
+		}
+		CleanGraph()
+	})
+
 }
 
 func TestGraphAddRoad(test *testing.T) {
