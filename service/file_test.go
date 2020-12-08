@@ -55,6 +55,7 @@ func TestReadCsvFile(test *testing.T) {
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
 			createTempCsvFile(testCase.resultWanted)
+
 			resultGot, err := ReadCsvFile(testCase.args)
 			if err != nil && err.Error() != testCase.errorWanted.Error() {
 				test.Errorf(
@@ -70,6 +71,7 @@ func TestReadCsvFile(test *testing.T) {
 					resultGot,
 				)
 			}
+
 			deleteTempCsvFile()
 		})
 	}
@@ -84,10 +86,22 @@ func TestWriteCsvFile(test *testing.T) {
 		errorWanted error
 	}{
 		{
-			"Write date into csv file with success",
+			"Write data into csv file with success",
 			"temp.csv",
 			[][]string{},
 			[]string{"OR", "DE", "11"},
+			nil,
+		},
+		{
+			"Append data into csv file with success",
+			"temp.csv",
+			[][]string{
+				{"A", "C", "1"},
+				{"B", "A", "5"},
+				{"C", "B", "3"},
+				{"B", "D", "2"},
+			},
+			[]string{"F", "H", "90"},
 			nil,
 		},
 	}
@@ -97,7 +111,12 @@ func TestWriteCsvFile(test *testing.T) {
 			createTempCsvFile(testCase.fileContent)
 
 			readBefore, _ := ReadCsvFile(testCase.fileName)
-			WriteCsvFile(testCase.fileName, testCase.text)
+			err := WriteCsvFile(testCase.fileName, testCase.text)
+
+			if err != nil {
+				test.Errorf("WriteCsvFile() got an unexpected error: %v", err)
+			}
+
 			readAfter, _ := ReadCsvFile(testCase.fileName)
 
 			expected := append(readBefore, testCase.text)
@@ -108,6 +127,7 @@ func TestWriteCsvFile(test *testing.T) {
 					readAfter,
 				)
 			}
+
 			deleteTempCsvFile()
 		})
 	}
