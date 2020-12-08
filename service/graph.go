@@ -18,6 +18,7 @@ func (graph *Graph) GetCity(cityName string) *City {
 }
 
 func (graph *Graph) AddCity(city *City) {
+	graph.Cities = append(graph.Cities, city)
 }
 
 func (graph *Graph) AddRoad(origin, destination *City, cost int) {
