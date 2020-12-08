@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 )
@@ -26,19 +27,29 @@ func TestReadCsvFile(test *testing.T) {
 			},
 			nil,
 		},
+		{
+			"Try to read a nonexistent file",
+			"nonexistent-file.csv",
+			[][]string{},
+			errors.New("open nonexistent-file.csv: no such file or directory"),
+		},
 	}
 
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
 			resultGot, err := ReadCsvFile(testCase.args)
-			if err != nil {
-				test.Errorf("ReadCsvFile got an error: %v", err)
+			if err != nil && err.Error() != testCase.errorWanted.Error() {
+				test.Errorf(
+					"ReadCsvFile() got an unexpected error: - want: <%v> but got: <%v>",
+					testCase.errorWanted,
+					err,
+				)
 			}
 			if !reflect.DeepEqual(resultGot, testCase.resultWanted) {
 				test.Errorf(
-					"ReadCsvFile got an unexpected result - want: <%v> but got: <%v>",
-					resultGot,
+					"ReadCsvFile() got an unexpected result - want: <%v> but got: <%v>",
 					testCase.resultWanted,
+					resultGot,
 				)
 			}
 		})

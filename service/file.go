@@ -7,7 +7,7 @@ import (
 )
 
 func ReadCsvFile(fileName string) ([][]string, error) {
-	var result [][]string
+	result := [][]string{}
 	file, err := os.Open(fileName)
 	defer file.Close()
 
