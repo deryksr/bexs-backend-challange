@@ -6,7 +6,11 @@ import (
 	"os"
 )
 
-var CsvFileName string
+var csvFileName string
+
+func GetCsvFileName() string {
+	return csvFileName
+}
 
 func ReadCsvFile(fileName string) ([][]string, error) {
 	result := [][]string{}
@@ -19,7 +23,7 @@ func ReadCsvFile(fileName string) ([][]string, error) {
 	}
 
 	csvReader := csv.NewReader(file)
-	CsvFileName = fileName
+	csvFileName = fileName
 
 	for {
 		line, err := csvReader.Read()
@@ -32,11 +36,11 @@ func ReadCsvFile(fileName string) ([][]string, error) {
 }
 
 func WriteCsvFile(fileName string, text []string) error {
-	file, err := os.OpenFile(CsvFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0775)
+	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0775)
 	defer file.Close()
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: Cannot open the file %s | Reason: %s", CsvFileName, err)
+		fmt.Fprintf(os.Stderr, "ERROR: Cannot open the file %s | Reason: %s", fileName, err)
 		return err
 	}
 
