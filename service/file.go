@@ -32,5 +32,16 @@ func ReadCsvFile(fileName string) ([][]string, error) {
 }
 
 func WriteCsvFile(fileName string, text []string) error {
+	file, err := os.OpenFile(CsvFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0775)
+	defer file.Close()
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: Cannot open the file %s | Reason: %s", CsvFileName, err)
+		return err
+	}
+
+	csvWriter := csv.NewWriter(file)
+	csvWriter.Write(text)
+	csvWriter.Flush()
 	return nil
 }
