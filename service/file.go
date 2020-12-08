@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+var CsvFileName string
+
 func ReadCsvFile(fileName string) ([][]string, error) {
 	result := [][]string{}
 	file, err := os.Open(fileName)
@@ -17,6 +19,8 @@ func ReadCsvFile(fileName string) ([][]string, error) {
 	}
 
 	csvReader := csv.NewReader(file)
+	CsvFileName = fileName
+
 	for {
 		line, err := csvReader.Read()
 		if err != nil {
@@ -25,4 +29,8 @@ func ReadCsvFile(fileName string) ([][]string, error) {
 		result = append(result, line)
 	}
 	return result, nil
+}
+
+func WriteCsvFile(fileName string, text []string) error {
+	return nil
 }

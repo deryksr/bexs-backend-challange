@@ -1,10 +1,27 @@
 package service
 
 import (
+	"encoding/csv"
 	"errors"
+	"os"
 	"reflect"
 	"testing"
 )
+
+func createTempCsvFile(text [][]string) {
+	file, _ := os.OpenFile("temp.csv", os.O_RDWR|os.O_CREATE, 0775)
+	defer file.Close()
+
+	csvWriter := csv.NewWriter(file)
+	for _, line := range text {
+		csvWriter.Write(line)
+	}
+	csvWriter.Flush()
+}
+
+func deleteTempCsvFile() {
+	os.Remove("temp.csv")
+}
 
 func TestReadCsvFile(test *testing.T) {
 	testGroup := []struct {
@@ -15,7 +32,7 @@ func TestReadCsvFile(test *testing.T) {
 	}{
 		{
 			"Read input.sv file with success",
-			"../input.csv",
+			"temp.csv",
 			[][]string{
 				{"GRU", "BRC", "10"},
 				{"BRC", "SCL", "5"},
@@ -37,6 +54,7 @@ func TestReadCsvFile(test *testing.T) {
 
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
+			createTempCsvFile(testCase.resultWanted)
 			resultGot, err := ReadCsvFile(testCase.args)
 			if err != nil && err.Error() != testCase.errorWanted.Error() {
 				test.Errorf(
@@ -52,7 +70,45 @@ func TestReadCsvFile(test *testing.T) {
 					resultGot,
 				)
 			}
+			deleteTempCsvFile()
 		})
 	}
+}
 
+func TestWriteCsvFile(test *testing.T) {
+	testGroup := []struct {
+		name        string
+		fileName    string
+		fileContent [][]string
+		text        []string
+		errorWanted error
+	}{
+		{
+			"Write date into csv file with success",
+			"temp.csv",
+			[][]string{},
+			[]string{"OR", "DE", "11"},
+			nil,
+		},
+	}
+
+	for _, testCase := range testGroup {
+		test.Run(testCase.name, func(test *testing.T) {
+			createTempCsvFile(testCase.fileContent)
+
+			readBefore, _ := ReadCsvFile(testCase.fileName)
+			WriteCsvFile(testCase.fileName, testCase.text)
+			readAfter, _ := ReadCsvFile(testCase.fileName)
+
+			expected := append(readBefore, testCase.text)
+			if !reflect.DeepEqual(expected, readAfter) {
+				test.Errorf(
+					"WriteCsvFile() got an unexpected result - want: <%v> but got: <%v>",
+					expected,
+					readAfter,
+				)
+			}
+			deleteTempCsvFile()
+		})
+	}
 }
