@@ -14,7 +14,7 @@ func TestGetBestRoute(test *testing.T) {
 		target       string
 		graphInput   [][]string
 		resultWanted Route
-		erroWanted   error
+		errorWanted  error
 	}{
 		{
 			"The best route is the only route",
@@ -28,6 +28,42 @@ func TestGetBestRoute(test *testing.T) {
 				Cost:  5,
 			},
 			nil,
+		},
+		{
+			"The cities are not connected",
+			"B",
+			"A",
+			[][]string{
+				{"A", "C", "5"},
+				{"B", "C", "7"},
+				{"C", "B", "1"},
+			},
+			Route{},
+			errors.New("None route has been found between B - A"),
+		},
+		{
+			"The source are not on the graph",
+			"H",
+			"A",
+			[][]string{
+				{"A", "C", "5"},
+				{"B", "C", "7"},
+				{"C", "B", "1"},
+			},
+			Route{},
+			errors.New("source <H> has not found"),
+		},
+		{
+			"The target are not on the graph",
+			"A",
+			"X",
+			[][]string{
+				{"A", "C", "5"},
+				{"B", "C", "7"},
+				{"C", "B", "1"},
+			},
+			Route{},
+			errors.New("target <X> has not found"),
 		},
 		{
 			"Has only one best route",
@@ -59,7 +95,15 @@ func TestGetBestRoute(test *testing.T) {
 				graph.AddRoad(&origin, &destination, cost)
 			}
 
-			bestRoute := GetBestRoute(testCase.source, testCase.target)
+			bestRoute, err := GetBestRoute(testCase.source, testCase.target)
+
+			if err != nil && err.Error() != testCase.errorWanted.Error() {
+				test.Errorf(
+					"TestGetBestRoute() got an unexpected error: - want: <%v> but got: <%v>",
+					testCase.errorWanted,
+					err,
+				)
+			}
 
 			if !reflect.DeepEqual(bestRoute, testCase.resultWanted) {
 				test.Errorf(
@@ -187,7 +231,7 @@ func TestGetAllRoutes(test *testing.T) {
 			allRoutes, err := GetAllRoutes(testCase.source, testCase.target)
 			if err != nil && err.Error() != testCase.errorWanted.Error() {
 				test.Errorf(
-					"ReadCsvFile() got an unexpected error: - want: <%v> but got: <%v>",
+					"TestGetAllRoutes() got an unexpected error: - want: <%v> but got: <%v>",
 					testCase.errorWanted,
 					err,
 				)

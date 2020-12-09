@@ -24,9 +24,24 @@ func getRoutes(source, target *City, path []*City, allCost int, allPaths *RouteL
 	}
 }
 
-func GetBestRoute(source, target string) Route {
-	var bestRoute Route
-	return bestRoute
+func GetBestRoute(source, target string) (Route, error) {
+	bestRoute := Route{}
+	allRoutes, err := GetAllRoutes(source, target)
+
+	if err != nil {
+		return bestRoute, err
+	}
+
+	bestRoute.Cost = allRoutes[0].Cost
+
+	for _, currentRoute := range allRoutes {
+		if bestRoute.Cost == currentRoute.Cost {
+			bestRoute.Paths = append(bestRoute.Paths, currentRoute.Paths...)
+		} else {
+			break
+		}
+	}
+	return bestRoute, nil
 }
 
 func GetAllRoutes(source, target string) (RouteList, error) {
