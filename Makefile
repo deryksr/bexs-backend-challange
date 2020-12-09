@@ -17,4 +17,5 @@ test:
 	@go test service/file.go service/file_test.go
 	@go test service/graph.go service/types.go service/graph_test.go
 	@go test service/utils.go service/types.go service/utils_test.go
+	@go test service/route.go service/graph.go service/types.go service/route_test.go
 	$(info All tests has been runned)

@@ -11,7 +11,7 @@ func (graph *Graph) getCity(cityName string) *City {
 	return nil
 }
 
-func GetGraphSingleton() *Graph {
+func GetGraphInstance() *Graph {
 	if graphSingleton == nil {
 		graphSingleton = new(Graph)
 	}

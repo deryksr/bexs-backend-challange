@@ -38,7 +38,7 @@ func TestGraphAddCity(test *testing.T) {
 
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
-			graph := GetGraphSingleton()
+			graph := GetGraphInstance()
 			for _, city := range testCase.input {
 				graph.AddCity(city)
 			}
@@ -55,7 +55,7 @@ func TestGraphAddCity(test *testing.T) {
 	}
 
 	test.Run("Do not add the same city twice", func(test *testing.T) {
-		graph := GetGraphSingleton()
+		graph := GetGraphInstance()
 		inputCity := City{"B", false, nil}
 		graph.AddCity(&inputCity)
 		graph.AddCity(&inputCity)
@@ -77,7 +77,7 @@ func TestGraphAddRoad(test *testing.T) {
 
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
-			graph := GetGraphSingleton()
+			graph := GetGraphInstance()
 			graph.Cities = testCase.input
 
 			newCity := City{"X", false, nil}
