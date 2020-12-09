@@ -5,6 +5,17 @@ import (
 	"sort"
 )
 
+func parseCitiesToString(cities []*City) (result string) {
+	for position, city := range cities {
+		if position != len(cities)-1 {
+			result += city.Name + " - "
+		} else {
+			result += city.Name
+		}
+	}
+	return result
+}
+
 func getRoutes(source, target *City, path []*City, allCost int, allPaths *RouteList) {
 	path = append(path, source)
 
