@@ -97,5 +97,4 @@ func TestGraphAddRoad(test *testing.T) {
 			CleanGraph()
 		})
 	}
-
 }
