@@ -84,6 +84,7 @@ func TestGraphAddRoad(test *testing.T) {
 			for _, currentCity := range graph.Cities {
 				expected := len(currentCity.Connections) + 1
 				graph.AddRoad(currentCity, &newCity, 95)
+				graph.AddRoad(currentCity, &newCity, 95)
 
 				if expected != len(currentCity.Connections) {
 					test.Errorf(

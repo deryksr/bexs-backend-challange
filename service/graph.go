@@ -2,6 +2,15 @@ package service
 
 var graphSingleton *Graph = nil
 
+func (graph *Graph) getCity(cityName string) *City {
+	for _, currentCity := range graph.Cities {
+		if currentCity.Name == cityName {
+			return currentCity
+		}
+	}
+	return nil
+}
+
 func GetGraphSingleton() *Graph {
 	if graphSingleton == nil {
 		graphSingleton = new(Graph)
@@ -27,4 +36,28 @@ func (graph *Graph) AddCity(city *City) {
 }
 
 func (graph *Graph) AddRoad(origin, destination *City, cost int) {
+	isPreset := false
+	originCity := graph.getCity(origin.Name)
+	destinationCity := graph.getCity(destination.Name)
+
+	if originCity == nil {
+		graph.AddCity(origin)
+		originCity = origin
+	}
+
+	if destinationCity == nil {
+		graph.AddCity(destination)
+		destinationCity = destination
+	}
+
+	for _, currentRoad := range originCity.Connections {
+		if currentRoad.Target == destinationCity {
+			isPreset = true
+			break
+		}
+	}
+	if !isPreset {
+		newRoad := &Road{Target: destinationCity, Cost: cost}
+		originCity.Connections = append(originCity.Connections, newRoad)
+	}
 }
