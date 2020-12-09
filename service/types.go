@@ -14,3 +14,10 @@ type City struct {
 	Visited     bool
 	Connections []*Road
 }
+
+type Route struct {
+	Paths []string
+	Cost  int
+}
+
+type RouteList []Route
