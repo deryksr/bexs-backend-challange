@@ -35,8 +35,7 @@ func (graph *Graph) AddCity(city *City) {
 	}
 }
 
-func (graph *Graph) AddRoad(origin, destination *City, cost int) {
-	isPreset := false
+func (graph *Graph) AddRoad(origin, destination *City, cost int) *Road {
 	originCity := graph.getCity(origin.Name)
 	destinationCity := graph.getCity(destination.Name)
 
@@ -52,12 +51,10 @@ func (graph *Graph) AddRoad(origin, destination *City, cost int) {
 
 	for _, currentRoad := range originCity.Connections {
 		if currentRoad.Target == destinationCity {
-			isPreset = true
-			break
+			return nil
 		}
 	}
-	if !isPreset {
-		newRoad := &Road{Target: destinationCity, Cost: cost}
-		originCity.Connections = append(originCity.Connections, newRoad)
-	}
+	newRoad := &Road{Target: destinationCity, Cost: cost}
+	originCity.Connections = append(originCity.Connections, newRoad)
+	return newRoad
 }
