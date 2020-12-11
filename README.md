@@ -197,6 +197,9 @@ don't have any way to connect each other
 
 ## Conclusion
 
-After all that I want to thanks the opportunity to take this test, that helps me a lot to understand more about Golang and it was very fun trying to solve that problem. Since college, I never took a look in a book about algorithms, and now I catch myself opening the Cormen book again kkkkkkkkkkk
+After all that I want to thanks the opportunity to take this test, that helps
+me a lot to understand more about Golang and also it was very fun trying to
+solve that problem. Since college, I never took a look in a book about
+algorithms, and now I catch myself opening the Cormen book again kkkkkkkkkkk =D
 
-**Thanks for all and That's all**
+> Thanks for all and That's all
