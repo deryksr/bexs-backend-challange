@@ -8,8 +8,8 @@ import (
 	"testing"
 )
 
-func createTempCsvFile(text [][]string) {
-	file, _ := os.OpenFile("temp.csv", os.O_RDWR|os.O_CREATE, 0775)
+func createTempCsvFile(fileName string, text [][]string) {
+	file, _ := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, 0775)
 	defer file.Close()
 
 	csvWriter := csv.NewWriter(file)
@@ -19,8 +19,8 @@ func createTempCsvFile(text [][]string) {
 	csvWriter.Flush()
 }
 
-func deleteTempCsvFile() {
-	os.Remove("temp.csv")
+func deleteTempCsvFile(fileName string) {
+	os.Remove(fileName)
 }
 
 func TestReadCsvFile(test *testing.T) {
@@ -54,7 +54,7 @@ func TestReadCsvFile(test *testing.T) {
 
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
-			createTempCsvFile(testCase.resultWanted)
+			createTempCsvFile(testCase.args, testCase.resultWanted)
 
 			resultGot, err := ReadCsvFile(testCase.args)
 			if err != nil && err.Error() != testCase.errorWanted.Error() {
@@ -72,7 +72,7 @@ func TestReadCsvFile(test *testing.T) {
 				)
 			}
 
-			deleteTempCsvFile()
+			deleteTempCsvFile(testCase.args)
 		})
 	}
 }
@@ -108,7 +108,7 @@ func TestWriteCsvFile(test *testing.T) {
 
 	for _, testCase := range testGroup {
 		test.Run(testCase.name, func(test *testing.T) {
-			createTempCsvFile(testCase.fileContent)
+			createTempCsvFile(testCase.fileName, testCase.fileContent)
 
 			readBefore, _ := ReadCsvFile(testCase.fileName)
 			err := WriteCsvFile(testCase.fileName, testCase.text)
@@ -128,7 +128,7 @@ func TestWriteCsvFile(test *testing.T) {
 				)
 			}
 
-			deleteTempCsvFile()
+			deleteTempCsvFile(testCase.fileName)
 		})
 	}
 }

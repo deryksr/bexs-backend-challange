@@ -223,7 +223,7 @@ func TestGetAllRoutes(test *testing.T) {
 			nil,
 		},
 		{
-			"Has only one best route",
+			"Get all paths to target",
 			"A",
 			"D",
 			[][]string{
@@ -243,6 +243,35 @@ func TestGetAllRoutes(test *testing.T) {
 				Route{
 					Paths: []string{"A - D"},
 					Cost:  9,
+				},
+				Route{
+					Paths: []string{"A - C - D"},
+					Cost:  11,
+				},
+				Route{
+					Paths: []string{"A - B - C - D"},
+					Cost:  22,
+				},
+			},
+			errors.New(""),
+		},
+		{
+			"Has two paths with the same cost",
+			"A",
+			"D",
+			[][]string{
+				{"A", "B", "5"},
+				{"B", "C", "9"},
+				{"B", "D", "1"},
+				{"C", "A", "2"},
+				{"A", "D", "6"},
+				{"A", "C", "3"},
+				{"C", "D", "8"},
+			},
+			[]Route{
+				Route{
+					Paths: []string{"A - B - D", "A - D"},
+					Cost:  6,
 				},
 				Route{
 					Paths: []string{"A - C - D"},

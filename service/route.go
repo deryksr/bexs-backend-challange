@@ -74,7 +74,24 @@ func GetAllRoutes(source, target string) (RouteList, error) {
 	if len(allPaths) < 1 {
 		return allPaths, errors.New("None route has been found between " + source + " - " + target)
 	}
-
 	sort.Sort(allPaths)
-	return allPaths, nil
+	pathsResult := RouteList{}
+
+	for _, route := range allPaths {
+		isPresent := false
+		if len(pathsResult) != 0 {
+			for index, _ := range pathsResult {
+				if pathsResult[index].Cost == route.Cost {
+					pathsResult[index].Paths = append(pathsResult[index].Paths, route.Paths...)
+					isPresent = true
+					break
+				}
+			}
+		}
+		if !isPresent {
+			pathsResult = append(pathsResult, route)
+		}
+	}
+
+	return pathsResult, nil
 }
