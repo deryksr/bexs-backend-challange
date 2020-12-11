@@ -14,7 +14,7 @@ func GetCsvFileName() string {
 
 func ReadCsvFile(fileName string) ([][]string, error) {
 	result := [][]string{}
-	file, err := os.Open(fileName)
+	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_RDWR, 0775)
 	defer file.Close()
 
 	if err != nil {
@@ -23,6 +23,7 @@ func ReadCsvFile(fileName string) ([][]string, error) {
 	}
 
 	csvReader := csv.NewReader(file)
+	csvWriter := csv.NewWriter(file)
 	csvFileName = fileName
 
 	for {
@@ -32,6 +33,8 @@ func ReadCsvFile(fileName string) ([][]string, error) {
 		}
 		result = append(result, line)
 	}
+	csvWriter.Write([]string{""}) // adds a new endline into csv file
+	csvWriter.Flush()
 	return result, nil
 }
 
