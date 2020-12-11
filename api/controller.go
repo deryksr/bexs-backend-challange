@@ -92,6 +92,7 @@ func AddRoute(response http.ResponseWriter, request *http.Request) {
 		)
 
 		if hasAdd != nil {
+			response.WriteHeader(http.StatusCreated)
 			response.Write([]byte("The path has been added with success!"))
 			service.WriteCsvFile(
 				service.GetCsvFileName(),
