@@ -1,7 +1,7 @@
-# Bexs Backend Challange
+# Bexs Backend Challenge
 
 The goal of this code is to presents a solution to the problem **Rota de Viagem** described at
-[bexs-backend-challange](https://bitbucket.org/bexstech/bexs-backend-exam/src/master/).
+[bexs-backend-challenge](https://bitbucket.org/bexstech/bexs-backend-exam/src/master/).
 
 > This document has been built following markdown [lint rules](https://github.com/markdownlint/markdownlint).
 
